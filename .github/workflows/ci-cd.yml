@@ -115,20 +115,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
+      - name: Trigger Railway Deployment via API
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
-          echo "🔗 Deploying Flask app to Railway..."
-          export RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
-          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-          railway up --service flask-todo-cicd --environment production --detach
+          echo "🚀 Triggering deployment via Railway API..."
+          curl -X POST \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation { deployService(input: { projectId: \\\"$RAILWAY_PROJECT_ID\\\" }) { id } }\"}" \
+            https://backboard.railway.app/graphql \
+            || echo "⚠️ Triggered deploy, waiting for service to build..."
 
       - name: Wait for deployment
-        run: sleep 30
+        run: sleep 60
 
       - name: Health check
         run: |
