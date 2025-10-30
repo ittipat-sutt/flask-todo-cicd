@@ -123,7 +123,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           echo "🔗 Deploying Flask app to Railway..."
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
           railway up --service flask-todo-cicd --environment production --detach
 
       - name: Wait for deployment
