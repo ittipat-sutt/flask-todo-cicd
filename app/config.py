@@ -4,8 +4,9 @@ from dotenv import load_dotenv
 # โหลดค่าจาก .env (ถ้ามี)
 load_dotenv()
 
+
 class Config:
-    """Base configuration class"""
+    """Base configuration class."""
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -15,7 +16,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    """Development configuration"""
+    """Development configuration."""
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
@@ -24,14 +25,14 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    """Testing configuration"""
+    """Testing configuration."""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     WTF_CSRF_ENABLED = False
 
 
 class ProductionConfig(Config):
-    """Production configuration"""
+    """Production configuration."""
     DEBUG = False
 
     # ✅ ดึง DATABASE_URL จาก environment (Railway จะส่งเข้ามาให้)
@@ -56,5 +57,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'default': DevelopmentConfig,
 }
